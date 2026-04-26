@@ -1,6 +1,6 @@
 package dev.zaid.event_notification_service.mapper;
 
-import dev.zaid.event_notification_service.dto.UserRequest;
+import dev.zaid.event_notification_service.dto.users.UserRequest;
 import dev.zaid.event_notification_service.entity.User;
 import org.springframework.stereotype.Component;
 

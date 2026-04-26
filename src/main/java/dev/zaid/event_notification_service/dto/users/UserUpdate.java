@@ -1,4 +1,4 @@
-package dev.zaid.event_notification_service.dto;
+package dev.zaid.event_notification_service.dto.users;
 
 import lombok.Getter;
 import lombok.Setter;

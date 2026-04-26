@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
     @Id
     private String id;
     private String userId;
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime lastUpdated = LocalDateTime.now();
     @NonNull
     private String title;
     @NonNull

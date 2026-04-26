@@ -1,6 +1,6 @@
 package dev.zaid.event_notification_service.controller;
 
-import dev.zaid.event_notification_service.dto.UserRequest;
+import dev.zaid.event_notification_service.dto.users.UserRequest;
 import dev.zaid.event_notification_service.entity.User;
 import dev.zaid.event_notification_service.service.UserDetailsServiceImpl;
 import dev.zaid.event_notification_service.service.UserService;
@@ -13,8 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.http.HttpResponse;
 
 @RestController
 @RequestMapping("/public")

@@ -1,7 +1,7 @@
 package dev.zaid.event_notification_service.service;
 
-import dev.zaid.event_notification_service.dto.UserRequest;
-import dev.zaid.event_notification_service.dto.UserUpdate;
+import dev.zaid.event_notification_service.dto.users.UserRequest;
+import dev.zaid.event_notification_service.dto.users.UserUpdate;
 import dev.zaid.event_notification_service.entity.User;
 import dev.zaid.event_notification_service.mapper.UserMapper;
 import dev.zaid.event_notification_service.repo.UserRepo;

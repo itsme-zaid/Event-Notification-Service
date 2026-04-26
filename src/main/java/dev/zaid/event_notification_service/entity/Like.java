@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
     @Id
     private String id;
     private String actorId;
-    private String userId;
     private String postId;
     private LocalDateTime createdAt = LocalDateTime.now();
 }

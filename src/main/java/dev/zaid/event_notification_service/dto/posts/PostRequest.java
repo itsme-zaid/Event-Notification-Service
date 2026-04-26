@@ -1,4 +1,4 @@
-package dev.zaid.event_notification_service.dto.users;
+package dev.zaid.event_notification_service.dto.posts;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -7,10 +7,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 
 @Getter
 @Setter
-public class UserRequest {
+public class PostRequest {
     @NonNull
-    @Indexed(unique = true)
-    private String username;
+    private String title;
     @NonNull
-    private String password;
+    private String content;
 }

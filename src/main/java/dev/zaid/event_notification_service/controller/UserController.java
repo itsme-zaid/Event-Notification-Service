@@ -1,12 +1,10 @@
 package dev.zaid.event_notification_service.controller;
 
-import dev.zaid.event_notification_service.dto.UserUpdate;
+import dev.zaid.event_notification_service.dto.users.UserUpdate;
 import dev.zaid.event_notification_service.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
