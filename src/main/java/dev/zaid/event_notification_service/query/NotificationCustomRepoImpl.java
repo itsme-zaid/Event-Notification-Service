@@ -15,7 +15,7 @@ public class NotificationCustomRepoImpl implements NotificationCustomRepo {
     @Autowired
     private MongoTemplate mongoTemplate;
     @Override
-    public List<Notification> findUnreadByUser(String userId) {
+    public List<Notification> findUnreadByUserId(String userId) {
         Query query = new Query();
         query.addCriteria(
                 Criteria.where("userId").is(userId)

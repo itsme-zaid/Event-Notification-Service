@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -27,29 +28,26 @@ public class PostService {
     private UserRepo userRepo;;
     @Autowired
     private PostMapper postMapper;
-    @PostMapping
     public ResponseEntity<?> createPost(String username, PostRequest postRequest){
         User user = userRepo.findByUsername(username).orElseThrow();
         Post post = postMapper.reqToPost(postRequest);
-        if(post.getUserId().equals(user.getId())){
-            post.setUserId(user.getId());
-            postRepo.save(post);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        post.setUserId(user.getId());
+        postRepo.save(post);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
-    @PutMapping
     public ResponseEntity<?> updatePost(PostUpdate postUpdate, String username, String postId){
         User user = userRepo.findByUsername(username).orElseThrow();
-        Post post = postMapper.reqUpdate(postUpdate);
+        Post post = postRepo.findById(postId).orElseThrow();
         if(post.getUserId().equals(user.getId())){
-            post.setId(postId);
+            post = postMapper.reqUpdate(postUpdate,post);
             postRepo.save(post);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+        System.out.println("Forbidden");
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @DeleteMapping
+
     public ResponseEntity<?> deletePost(String username,String postId){
         User user = userRepo.findByUsername(username).orElseThrow();
         Post post = postRepo.findById(postId).orElseThrow();
@@ -59,7 +57,7 @@ public class PostService {
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-    @GetMapping
+
     public ResponseEntity<?> getPost(String username, String postId){
         User user = userRepo.findByUsername(username).orElseThrow();
         Post post = postRepo.findById(postId).orElseThrow();
@@ -67,4 +65,11 @@ public class PostService {
             return new ResponseEntity<>(postMapper.postToResponse(post),HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
+
+    public List<Post> getPostsByUsername(String username){
+        User user = userRepo.findByUsername(username).orElseThrow();
+        String userId = user.getId();
+        return postRepo.getPostsByUserId(userId);
+    }
+
 }

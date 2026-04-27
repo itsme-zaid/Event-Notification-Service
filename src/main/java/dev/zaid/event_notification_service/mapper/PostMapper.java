@@ -14,8 +14,7 @@ public class PostMapper {
         post.setContent(postRequest.getContent());
         return post;
     }
-    public Post reqUpdate(PostUpdate postUpdate){
-        Post post = new Post();
+    public Post reqUpdate(PostUpdate postUpdate, Post post){
         if(postUpdate.getTitle()!=null) post.setTitle(postUpdate.getTitle());
         if(postUpdate.getContent()!=null) post.setContent(postUpdate.getContent());
         return post;
