@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class PostLikeMapper implements NotificationMapper<LikeEvent> {
     @Override
     public String getEventType() {
-        return "POST_LIKED";
+        return "LIKE_EVENT";
     }
 
     @Override

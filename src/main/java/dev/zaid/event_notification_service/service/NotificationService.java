@@ -26,5 +26,8 @@ public class NotificationService {
         String userId = user.getId();
         return notificationRepo.findUnreadByUserId(userId);
     }
+    public void save(Notification notification){
+        notificationRepo.save(notification);
+    }
 
 }
