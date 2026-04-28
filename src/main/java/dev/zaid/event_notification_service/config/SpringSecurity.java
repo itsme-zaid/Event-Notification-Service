@@ -32,7 +32,7 @@ public class SpringSecurity {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers( "/user/**", "/notes/**").authenticated()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/dev/**").hasRole("dev")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

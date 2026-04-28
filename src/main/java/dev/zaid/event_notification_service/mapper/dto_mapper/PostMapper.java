@@ -1,4 +1,4 @@
-package dev.zaid.event_notification_service.mapper;
+package dev.zaid.event_notification_service.mapper.dto_mapper;
 
 import dev.zaid.event_notification_service.dto.posts.PostRequest;
 import dev.zaid.event_notification_service.dto.posts.PostResponse;

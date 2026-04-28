@@ -1,4 +1,4 @@
-package dev.zaid.event_notification_service.mapper;
+package dev.zaid.event_notification_service.mapper.dto_mapper;
 
 import dev.zaid.event_notification_service.dto.users.UserRequest;
 import dev.zaid.event_notification_service.entity.User;
