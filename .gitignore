@@ -34,3 +34,4 @@ build/
 
 #Mine
 application.properties
+application.yaml
