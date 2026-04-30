@@ -18,6 +18,8 @@ public class LikeMapper implements NotificationMapper<LikeEvent> {
         notification.setUserId(event.getPostOwnerId());
         notification.setType(event.getEventType());
         notification.setActorId(event.getActorId());
+        notification.setEventId(event.getEventId());
+        notification.setPostId(event.getPostId());
         return notification;
     }
 }

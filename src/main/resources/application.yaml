@@ -2,6 +2,7 @@ spring:
   application:
     name: event-notification-service
   mongodb:
+    auto-index-creation: true
     database: events_db
     uri: mongodb+srv://notzaidcodes_db_user:qTNShA86njR70Vjv@cluster0.sqw8zsg.mongodb.net/?appName=Cluster0
   kafka:

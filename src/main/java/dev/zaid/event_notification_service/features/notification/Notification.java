@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
     private String actorId;
     private String userId;
     private String type;
+    private String postId;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime eventTime;
     private String eventId;
