@@ -1,7 +1,7 @@
 package dev.zaid.event_notification_service.config;
 
-import dev.zaid.event_notification_service.filter.JwtFilter;
-import dev.zaid.event_notification_service.service.UserDetailsServiceImpl;
+import dev.zaid.event_notification_service.features.Jwt.JwtFilter;
+import dev.zaid.event_notification_service.features.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
