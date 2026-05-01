@@ -1,5 +1,6 @@
 package dev.zaid.event_notification_service.features.public_feature;
 
+import dev.zaid.event_notification_service.features.Jwt.CustomUserDetails;
 import dev.zaid.event_notification_service.features.user.dto.UserRequest;
 import dev.zaid.event_notification_service.features.user.User;
 import dev.zaid.event_notification_service.features.user.UserDetailsServiceImpl;
@@ -40,9 +41,12 @@ public class PublicController {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword())
         );
+
         if(auth.isAuthenticated()){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-            return new ResponseEntity<>(jwtUtilService.generateToken(userDetails.getUsername()), HttpStatus.OK);
+            CustomUserDetails customUserDetails = (CustomUserDetails) auth.getPrincipal();
+            //CustomUserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            //CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+            return new ResponseEntity<>(jwtUtilService.generateToken(customUserDetails), HttpStatus.OK);
         }
         throw new RuntimeException("Invalid Credentials");
     }

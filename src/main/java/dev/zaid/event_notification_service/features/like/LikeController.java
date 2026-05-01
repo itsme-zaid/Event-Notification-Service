@@ -1,5 +1,6 @@
 package dev.zaid.event_notification_service.features.like;
 
+import dev.zaid.event_notification_service.features.Jwt.CustomUserDetails;
 import dev.zaid.event_notification_service.features.like.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ public class LikeController {
     private LikeService likeService;
     @PostMapping("/{postId}")
     public ResponseEntity<?> like(Authentication authentication, @PathVariable String postId){
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         likeService.postLike(authentication.getName(),postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
