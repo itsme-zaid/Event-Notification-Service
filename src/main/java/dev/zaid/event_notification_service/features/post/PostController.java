@@ -17,22 +17,22 @@ public class PostController {
     private PostService postService;
     @PostMapping
     public ResponseEntity<?> createPost(Authentication authentication, @RequestBody PostRequest postRequest){
-        return postService.createPost(authentication.getName(),postRequest);
+        return postService.createPost(authentication,postRequest);
     }
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(Authentication authentication,@PathVariable String postId){
-        return postService.getPost(authentication.getName(),postId);
+        return postService.getPost(authentication,postId);
     }
     @DeleteMapping("/{postId}")
     public ResponseEntity<?> deletePost(Authentication authentication, @PathVariable String postId){
-        return postService.deletePost(authentication.getName(),postId);
+        return postService.deletePost(authentication,postId);
     }
     @PutMapping("/{postId}")
     public ResponseEntity<?> updatePost(@RequestBody PostUpdate postUpdate, Authentication authentication, @PathVariable String postId){
-        return postService.updatePost(postUpdate, authentication.getName(), postId);
+        return postService.updatePost(postUpdate, authentication, postId);
     }
     @GetMapping
     public List<Post> getPosts(Authentication authentication){
-        return postService.getPostsByUsername(authentication.getName());
+        return postService.getPostsByUsername(authentication);
     }
 }

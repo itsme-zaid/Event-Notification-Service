@@ -1,5 +1,6 @@
 package dev.zaid.event_notification_service.features.notification;
 
+import dev.zaid.event_notification_service.features.Jwt.CustomUserDetails;
 import dev.zaid.event_notification_service.features.like.LikeService;
 import dev.zaid.event_notification_service.features.notification.Notification;
 import dev.zaid.event_notification_service.features.user.User;
@@ -9,6 +10,7 @@ import dev.zaid.event_notification_service.features.user.UserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +26,9 @@ public class NotificationService {
 
 
     // generate Notification;
-    public List<Notification> getAllUnread(String username){
-        User user = userRepo.findByUsername(username).orElseThrow();
-        String userId = user.getId();
+    public List<Notification> getAllUnread(Authentication authentication){
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = customUserDetails.getUserId();
         return notificationRepo.findUnreadByUserId(userId);
     }
     public void save(Notification notification){

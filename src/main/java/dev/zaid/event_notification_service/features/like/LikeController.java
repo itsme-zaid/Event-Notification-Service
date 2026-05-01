@@ -16,12 +16,12 @@ public class LikeController {
     private LikeService likeService;
     @PostMapping("/{postId}")
     public ResponseEntity<?> like(Authentication authentication, @PathVariable String postId){
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        likeService.postLike(authentication.getName(),postId);
+        //CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        likeService.postLike(authentication,postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @DeleteMapping("/{postId}")
     public ResponseEntity<?> unlike(Authentication authentication, @PathVariable String postId){
-        return likeService.unlike(authentication.getName(),postId);
+        return likeService.unlike(authentication,postId);
     }
 }

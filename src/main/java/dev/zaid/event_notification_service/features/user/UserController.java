@@ -27,6 +27,6 @@ public class UserController {
         return userService.updateUser(authentication.getName(),userUpdate);
     }
     public List<Notification> getAllUnread(Authentication authentication){
-        return notificationService.getAllUnread(authentication.getName());
+        return notificationService.getAllUnread(authentication);
     }
 }
