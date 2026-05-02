@@ -31,8 +31,13 @@ public class NotificationService {
         String userId = customUserDetails.getUserId();
         return notificationRepo.findUnreadByUserId(userId);
     }
+    public void markAsRead(Authentication authentication){
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = customUserDetails.getUserId();
+        notificationRepo.markAsRead(userId);
+        return;
+    }
     public void save(Notification notification){
         notificationRepo.save(notification);
     }
-
 }

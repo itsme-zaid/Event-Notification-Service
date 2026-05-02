@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,4 +33,16 @@ public class NotificationCustomRepoImpl implements NotificationCustomRepo {
         );
         return mongoTemplate.find(query,Notification.class);
     }
+
+    @Override
+    public void markAsRead(String userId) {
+        Query query = new Query();
+        query.addCriteria(
+                Criteria.where("isRead").is(false)
+        );
+        Update update = new Update();
+        update.set("isRead",true);
+        mongoTemplate.updateMulti(query,update,Notification.class);
+    }
+
 }

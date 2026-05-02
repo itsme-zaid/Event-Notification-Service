@@ -7,4 +7,5 @@ import java.util.List;
 public interface NotificationCustomRepo {
     List<Notification> findUnreadByUserId(String userId);
     List<Notification> findByActorId(String actorId);
+    void markAsRead(String userId);
 }
