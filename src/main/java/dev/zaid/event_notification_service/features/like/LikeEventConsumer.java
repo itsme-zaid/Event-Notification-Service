@@ -24,6 +24,7 @@ public class LikeEventConsumer {
         // 2. Save to DB
         try{
             notificationService.save(notification);
+            System.out.println("=== CONSUMED === ");
         }catch(Exception e){
             log.warn("Kafka sending duplicate notifications");
             return;
@@ -31,6 +32,10 @@ public class LikeEventConsumer {
 
         // 3. (Optional) Send real-time push/email
     }
+//    @KafkaListener(topics = "likes-event", groupId = "notification-group")
+//    public void listen(String message) {
+//        System.out.println("Received: " + message);
+//    }
 //    @KafkaListener(topics = "like-events", groupId = "notification-group")
 //    public void consume(String message) {
 //        System.out.println("=== CONSUMED === " + message);

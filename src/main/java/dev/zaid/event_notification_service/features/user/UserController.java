@@ -1,5 +1,6 @@
 package dev.zaid.event_notification_service.features.user;
 
+import dev.zaid.event_notification_service.features.follow.FollowService;
 import dev.zaid.event_notification_service.features.user.dto.UserUpdate;
 import dev.zaid.event_notification_service.features.notification.Notification;
 import dev.zaid.event_notification_service.features.notification.NotificationService;
@@ -17,6 +18,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private FollowService followService;
     @DeleteMapping
     public ResponseEntity<?> deleteUser(Authentication authentication){
         String username = authentication.getName();
@@ -26,7 +29,14 @@ public class UserController {
     public ResponseEntity<?> updateUser(Authentication authentication, @RequestBody UserUpdate userUpdate){
         return userService.updateUser(authentication.getName(),userUpdate);
     }
+    @GetMapping("/notifications")
     public List<Notification> getAllUnread(Authentication authentication){
         return notificationService.getAllUnread(authentication);
     }
+
+    @PostMapping("/follow/{userId}")
+    public ResponseEntity<?> followUser(Authentication authentication, @PathVariable String userId){
+        return followService.saveFollow(authentication,userId);
+    }
+
 }

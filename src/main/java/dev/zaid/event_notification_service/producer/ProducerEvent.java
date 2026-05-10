@@ -1,5 +1,6 @@
 package dev.zaid.event_notification_service.producer;
 
+import dev.zaid.event_notification_service.features.follow.FollowEvent;
 import dev.zaid.event_notification_service.features.like.LikeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,5 +23,9 @@ public class ProducerEvent {
                                 " partition=" + result.getRecordMetadata().partition());
                     }
                 });
+    }
+    public void produceFollow(FollowEvent event){
+        String key = event.getUserId();
+        kafkaTemplate.send("follow-events",key,event);
     }
 }
