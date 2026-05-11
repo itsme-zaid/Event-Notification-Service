@@ -34,9 +34,6 @@ public class UserController {
         return notificationService.getAllUnread(authentication);
     }
 
-    @PostMapping("/follow/{userId}")
-    public ResponseEntity<?> followUser(Authentication authentication, @PathVariable String userId){
-        return followService.saveFollow(authentication,userId);
-    }
+
 
 }
