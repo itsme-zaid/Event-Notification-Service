@@ -12,6 +12,6 @@ public class PostEvent extends DomainEvent {
     public PostEvent(String actorId, String postId){
         super("POST_EVENT");
         this.authorId = actorId;
-
+        this.postId = postId;
     }
 }

@@ -25,7 +25,7 @@ public class PostEventConsumer {
 
         // 2. Save to DB
         try{
-                notificationService.saveForFollowers(notification);
+            notificationService.saveForFollowers(notification);
             System.out.println("=== CONSUMED === ");
         }catch(Exception e){
             log.warn("Kafka sending duplicate notifications");

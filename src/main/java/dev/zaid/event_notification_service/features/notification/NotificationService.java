@@ -46,14 +46,24 @@ public class NotificationService {
     }
     public void saveForFollowers(Notification n){
         String userId = n.getUserId();
+
         List<String> followers = followService.getFollowers(userId);
         List<Notification> notifications = new ArrayList<>();
+
         for(String f : followers){
             notifications.add(
                     new Notification(n.getActorId(),f,n.getType(),n.getPostId(),n.getEventId())
             );
         }
-        notificationRepo.saveAll(notifications);
+        int batchsize = 300;
+        for(int i=0; i<notifications.size(); i+=batchsize){
+            List<Notification> batch =
+                    notifications.subList(
+                            i,
+                            Math.min(i + batchsize, notifications.size())
+                    );
+            notificationRepo.saveAll(batch);
+        }
 
     }
 }
