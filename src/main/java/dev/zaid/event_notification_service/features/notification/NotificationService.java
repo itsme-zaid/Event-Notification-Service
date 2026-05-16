@@ -1,6 +1,7 @@
 package dev.zaid.event_notification_service.features.notification;
 
 import dev.zaid.event_notification_service.features.Jwt.CustomUserDetails;
+import dev.zaid.event_notification_service.features.follow.FollowService;
 import dev.zaid.event_notification_service.features.like.LikeService;
 import dev.zaid.event_notification_service.features.notification.Notification;
 import dev.zaid.event_notification_service.features.user.User;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +25,8 @@ public class NotificationService {
     private UserRepo userRepo;
     @Autowired
     private PostRepo postRepo;
+    @Autowired
+    private FollowService followService;
 
 
     // generate Notification;
@@ -39,5 +43,17 @@ public class NotificationService {
     }
     public void save(Notification notification){
         notificationRepo.save(notification);
+    }
+    public void saveForFollowers(Notification n){
+        String userId = n.getUserId();
+        List<String> followers = followService.getFollowers(userId);
+        List<Notification> notifications = new ArrayList<>();
+        for(String f : followers){
+            notifications.add(
+                    new Notification(n.getActorId(),f,n.getType(),n.getPostId(),n.getEventId())
+            );
+        }
+        notificationRepo.saveAll(notifications);
+
     }
 }

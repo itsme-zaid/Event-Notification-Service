@@ -63,4 +63,12 @@ public class FollowService {
         for(User u : users) userResponses.add(userMapper.userToResp(u));
         return new ResponseEntity<>(userResponses,HttpStatus.OK);
     }
+
+    public List<String> getFollowers(String actorId){
+        // get all the follows with followerId -> userId;
+        List<Follow> followList = followRepo.findByFollowingId(actorId).orElseThrow();
+        List<String> followerIds = new ArrayList<>();
+        for(Follow f : followList) followerIds.add(f.getFollowerId());
+        return followerIds;
+    }
 }

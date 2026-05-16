@@ -2,6 +2,7 @@ package dev.zaid.event_notification_service.producer;
 
 import dev.zaid.event_notification_service.features.follow.FollowEvent;
 import dev.zaid.event_notification_service.features.like.LikeEvent;
+import dev.zaid.event_notification_service.features.post.PostEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,10 @@ public class ProducerEvent {
     public void produceFollow(FollowEvent event){
         String key = event.getUserId();
         kafkaTemplate.send("follow-events",key,event);
+    }
+
+    public void producePost(PostEvent event){
+        String key = event.getAuthorId();
+        kafkaTemplate.send("post-events",event);
     }
 }

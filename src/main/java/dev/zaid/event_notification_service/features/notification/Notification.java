@@ -1,6 +1,7 @@
 package dev.zaid.event_notification_service.features.notification;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @CompoundIndex(
         // save notification only when their does not exist a prior notification with both the eventId and actorId same to this notification you are trying to generate;
         name = "event_recipient_unique",
@@ -18,6 +20,13 @@ import java.time.LocalDateTime;
         unique = true
 )
 @Document(collection = "notifications") public class Notification {
+    public Notification(String actorId, String userId, String type, String postId, String eventId){
+        this.actorId = actorId;
+        this.userId = userId;
+        this.type =type;
+        this.postId = postId;
+        this.eventId =eventId;
+    }
     @Id
     private String id;
     private String actorId;

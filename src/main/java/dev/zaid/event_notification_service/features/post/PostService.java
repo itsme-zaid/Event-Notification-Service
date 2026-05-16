@@ -3,9 +3,9 @@ package dev.zaid.event_notification_service.features.post;
 import dev.zaid.event_notification_service.features.Jwt.CustomUserDetails;
 import dev.zaid.event_notification_service.features.post.dto.PostRequest;
 import dev.zaid.event_notification_service.features.post.dto.PostUpdate;
-import dev.zaid.event_notification_service.features.user.User;
-import dev.zaid.event_notification_service.features.post.dto_mapper.PostMapper;
+import dev.zaid.event_notification_service.features.post.dto_mapper.DtoPostMapper;
 import dev.zaid.event_notification_service.features.user.UserRepo;
+import dev.zaid.event_notification_service.producer.ProducerEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +22,20 @@ public class PostService {
     @Autowired
     private UserRepo userRepo;;
     @Autowired
-    private PostMapper postMapper;
+    private DtoPostMapper dtoPostMapper;
+
+    @Autowired
+    private ProducerEvent producerEvent;
     public ResponseEntity<?> createPost(Authentication authentication, PostRequest postRequest){
+        // save the post in database;
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String userId = customUserDetails.getUserId();
-        Post post = postMapper.reqToPost(postRequest);
+        Post post = dtoPostMapper.reqToPost(postRequest);
         post.setUserId(userId);
         postRepo.save(post);
+
+
+        producerEvent.producePost(new PostEvent(userId,post.getId()));
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
@@ -37,7 +44,7 @@ public class PostService {
         String userId = customUserDetails.getUserId();
         Post post = postRepo.findById(postId).orElseThrow();
         if(post.getUserId().equals(userId)){
-            post = postMapper.reqUpdate(postUpdate,post);
+            post = dtoPostMapper.reqUpdate(postUpdate,post);
             postRepo.save(post);
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -61,7 +68,7 @@ public class PostService {
         String userId = customUserDetails.getUserId();
         Post post = postRepo.findById(postId).orElseThrow();
         if(Objects.equals(post.getUserId(), userId))
-            return new ResponseEntity<>(postMapper.postToResponse(post),HttpStatus.OK);
+            return new ResponseEntity<>(dtoPostMapper.postToResponse(post),HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 

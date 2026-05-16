@@ -7,7 +7,7 @@ import dev.zaid.event_notification_service.features.post.Post;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PostMapper {
+public class DtoPostMapper {
     public Post reqToPost(PostRequest postRequest){
         Post post = new Post();
         post.setTitle(postRequest.getTitle());
