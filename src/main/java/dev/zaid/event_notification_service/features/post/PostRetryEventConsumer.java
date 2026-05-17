@@ -1,8 +1,6 @@
 package dev.zaid.event_notification_service.features.post;
 
 import com.mongodb.DuplicateKeyException;
-import dev.zaid.event_notification_service.features.like.LikeEvent;
-import dev.zaid.event_notification_service.features.like.LikeService;
 import dev.zaid.event_notification_service.features.notification.Notification;
 import dev.zaid.event_notification_service.features.notification.NotificationService;
 import dev.zaid.event_notification_service.features.notification.registry.NotificationMapperRegistry;
@@ -16,31 +14,41 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PostEventConsumer {
+public class PostRetryEventConsumer {
     @Autowired
     private NotificationMapperRegistry mapperRegistry;
     @Autowired
     private NotificationService notificationService;
+
+    private final static Logger log = LoggerFactory.getLogger(PostRetryEventConsumer.class);
     @Autowired
     private ProducerEvent producerEvent;
-    private final static Logger log = LoggerFactory.getLogger(PostEventConsumer.class);
-    @KafkaListener(topics = "post-events", groupId = "notification-group")
-    public void consume(PostEvent event) {
+    @KafkaListener(topics = "post-events-re", groupId = "notification-group")
+    public void consume(PostEventRE event) {
+        if(event.getRemainingRetries() == 0 ){
+            log.info("Maximum retries consumed, adding to dlq");
+            // add to dlq;
+            return;
+        }
         // 1. Map event to notification
-        Notification notification = mapperRegistry.map(event);
+        Notification notification = mapperRegistry.map(event.getOriginalEvent());
 
         // 2. Save to DB
         try{
-            //System.out.println("Sending a forced-retry");
-            //throw new TransientDataAccessResourceException("Forced-Retry");
+            //throw new TransientDataAccessResourceException("Forced retry at PostRetryEventConsumer");
             notificationService.saveForFollowers(notification);
-            System.out.println("=== CONSUMED === ");
+            System.out.println("=== CONSUMED === at PostRetryEventConsumer ");
         }catch(DuplicateKeyException e){
             log.warn("Kafka sending duplicate notifications");
-
         }catch(TransientDataAccessException e){
+            log.warn(
+                    "Retrying post event postId={} retriesLeft={}",
+                    event.getOriginalEvent().getPostId(),
+                    event.getRemainingRetries()
+            );
             //send to retry topic
-            producerEvent.producePostRE(new PostEventRE(event,3,e.getMessage()));
+            event.setRemainingRetries(event.getRemainingRetries() - 1);
+            producerEvent.producePostRE(event);
         }catch(Exception e){
             log.info("Something wrong");
             // send to dlq;
