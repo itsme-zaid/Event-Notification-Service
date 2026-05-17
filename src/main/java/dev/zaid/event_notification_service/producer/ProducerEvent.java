@@ -39,4 +39,12 @@ public class ProducerEvent {
         String key = re.getOriginalEvent().getAuthorId();
         kafkaTemplate.send("post-events-re",re);
     }
+    public void produceLikeRE(RetryEvent<LikeEvent> re){
+        String key = re.getOriginalEvent().getActorId();
+        kafkaTemplate.send("like-events-re",re);
+    }
+    public void produceFollowRE(RetryEvent<FollowEvent> re){
+        String key = re.getOriginalEvent().getUserId();
+        kafkaTemplate.send("follow-events-re",re);
+    }
 }
