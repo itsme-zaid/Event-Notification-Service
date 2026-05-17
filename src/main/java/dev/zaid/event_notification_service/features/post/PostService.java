@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,8 +34,6 @@ public class PostService {
         Post post = dtoPostMapper.reqToPost(postRequest);
         post.setUserId(userId);
         postRepo.save(post);
-
-
         producerEvent.producePost(new PostEvent(userId,post.getId()));
         return new ResponseEntity<>(HttpStatus.OK);
 
@@ -42,10 +41,15 @@ public class PostService {
     public ResponseEntity<?> updatePost(PostUpdate postUpdate, Authentication authentication, String postId){
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String userId = customUserDetails.getUserId();
-        Post post = postRepo.findById(postId).orElseThrow();
+        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         if(post.getUserId().equals(userId)){
             post = dtoPostMapper.reqUpdate(postUpdate,post);
-            postRepo.save(post);
+            post.setLastUpdated(LocalDateTime.now());
+            try {
+                postRepo.save(post);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to save post :  " + e.getMessage());
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         }
         System.out.println("Forbidden");
@@ -55,7 +59,7 @@ public class PostService {
     public ResponseEntity<?> deletePost(Authentication authentication,String postId){
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String userId = customUserDetails.getUserId();
-        Post post = postRepo.findById(postId).orElseThrow();
+        Post post = postRepo.findById(postId).orElseThrow(()-> new RuntimeException("Post not found"));
         if(post.getUserId().equals(userId)){
             postRepo.deleteById(postId);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -66,7 +70,7 @@ public class PostService {
     public ResponseEntity<?> getPost(Authentication authentication, String postId){
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String userId = customUserDetails.getUserId();
-        Post post = postRepo.findById(postId).orElseThrow();
+        Post post = postRepo.findById(postId).orElseThrow(()-> new RuntimeException("Post not found"));
         if(Objects.equals(post.getUserId(), userId))
             return new ResponseEntity<>(dtoPostMapper.postToResponse(post),HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

@@ -17,7 +17,7 @@ public class PostEventConsumer {
     private NotificationMapperRegistry mapperRegistry;
     @Autowired
     private NotificationService notificationService;
-    private final static Logger log = LoggerFactory.getLogger(LikeService.class);
+    private final static Logger log = LoggerFactory.getLogger(PostEventConsumer.class);
     @KafkaListener(topics = "post-events", groupId = "notification-group")
     public void consume(PostEvent event) {
         // 1. Map event to notification

@@ -12,6 +12,7 @@ public class CustomUserDetails implements UserDetails {
     private String username;
     private String userId;
     private String password;
+    //private int tokenVersion;
     private Collection<? extends GrantedAuthority> authorities;
     public CustomUserDetails(String userId, String username, String password,
                              Collection<? extends GrantedAuthority> authorities) {
@@ -19,6 +20,7 @@ public class CustomUserDetails implements UserDetails {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
+
     }
 
     @Override

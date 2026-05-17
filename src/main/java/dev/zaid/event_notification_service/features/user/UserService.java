@@ -39,8 +39,8 @@ public class UserService {
     }
     public ResponseEntity<?> updateUser(String username, UserUpdate userUpdate){
         User user = userRepo.findByUsername(username).orElseThrow();
-        if(userUpdate.getUsername()!="") user.setUsername(userUpdate.getUsername());
-        if(userUpdate.getPassword()!="") user.setPassword(pswdEncoder.encode(userUpdate.getPassword()));
+        if(!userUpdate.getUsername().equals("")) user.setUsername(userUpdate.getUsername());
+        if(!userUpdate.getPassword().equals("")) user.setPassword(pswdEncoder.encode(userUpdate.getPassword()));
         userRepo.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

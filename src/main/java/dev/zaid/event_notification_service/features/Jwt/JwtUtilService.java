@@ -68,4 +68,19 @@ public class JwtUtilService {
                 return false;
             }
         }
+        /*
+        public boolean validateToken(String token, int userVersion) {
+            try {
+                var claims = Jwts.parser()
+                .verifyWith(getSignKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+            int ver = claims.get("version");
+            if(userVersion != ver) return false;
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }*/
     }
