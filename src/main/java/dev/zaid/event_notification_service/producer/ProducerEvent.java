@@ -1,9 +1,9 @@
 package dev.zaid.event_notification_service.producer;
 
+import dev.zaid.event_notification_service.events.RetryEvent;
 import dev.zaid.event_notification_service.features.follow.FollowEvent;
 import dev.zaid.event_notification_service.features.like.LikeEvent;
 import dev.zaid.event_notification_service.features.post.PostEvent;
-import dev.zaid.event_notification_service.features.post.PostEventRE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -35,8 +35,8 @@ public class ProducerEvent {
         String key = event.getAuthorId();
         kafkaTemplate.send("post-events",event);
     }
-    public void producePostRE(PostEventRE event){
-        String key = event.getOriginalEvent().getAuthorId();
-        kafkaTemplate.send("post-events-re",event);
+    public void producePostRE(RetryEvent<PostEvent> re){
+        String key = re.getOriginalEvent().getAuthorId();
+        kafkaTemplate.send("post-events-re",re);
     }
 }

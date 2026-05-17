@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public abstract class RetryEvent<T> {
+public class RetryEvent<T> {
     private T originalEvent;
     private int remainingRetries;
     private String lastError;

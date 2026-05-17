@@ -1,6 +1,7 @@
 package dev.zaid.event_notification_service.features.post;
 
 import com.mongodb.DuplicateKeyException;
+import dev.zaid.event_notification_service.events.RetryEvent;
 import dev.zaid.event_notification_service.features.notification.Notification;
 import dev.zaid.event_notification_service.features.notification.NotificationService;
 import dev.zaid.event_notification_service.features.notification.registry.NotificationMapperRegistry;
@@ -24,7 +25,7 @@ public class PostRetryEventConsumer {
     @Autowired
     private ProducerEvent producerEvent;
     @KafkaListener(topics = "post-events-re", groupId = "notification-group")
-    public void consume(PostEventRE event) {
+    public void consume(RetryEvent<PostEvent> event) {
         if(event.getRemainingRetries() == 0 ){
             log.info("Maximum retries consumed, adding to dlq");
             // add to dlq;

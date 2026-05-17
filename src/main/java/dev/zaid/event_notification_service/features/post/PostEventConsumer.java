@@ -1,6 +1,7 @@
 package dev.zaid.event_notification_service.features.post;
 
 import com.mongodb.DuplicateKeyException;
+import dev.zaid.event_notification_service.events.RetryEvent;
 import dev.zaid.event_notification_service.features.like.LikeEvent;
 import dev.zaid.event_notification_service.features.like.LikeService;
 import dev.zaid.event_notification_service.features.notification.Notification;
@@ -40,7 +41,8 @@ public class PostEventConsumer {
 
         }catch(TransientDataAccessException e){
             //send to retry topic
-            producerEvent.producePostRE(new PostEventRE(event,3,e.getMessage()));
+            RetryEvent<PostEvent> retryEvent = new RetryEvent<>(event,3,e.getMessage());
+            producerEvent.producePostRE(retryEvent);
         }catch(Exception e){
             log.info("Something wrong");
             // send to dlq;
