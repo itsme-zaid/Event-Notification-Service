@@ -2,6 +2,7 @@ package dev.zaid.event_notification_service.features.like;
 
 import com.mongodb.DuplicateKeyException;
 import dev.zaid.event_notification_service.events.RetryEvent;
+import dev.zaid.event_notification_service.features.follow.FollowEvent;
 import dev.zaid.event_notification_service.features.notification.Notification;
 import dev.zaid.event_notification_service.features.notification.NotificationService;
 import dev.zaid.event_notification_service.features.notification.registry.NotificationMapperRegistry;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class LikeRetryConsumer {
@@ -22,16 +24,20 @@ public class LikeRetryConsumer {
     private NotificationMapperRegistry mapperRegistry;
     @Autowired
     private ProducerEvent producerEvent;
+    @Autowired
+    private ObjectMapper mapper;
     private final static Logger log = LoggerFactory.getLogger(LikeRetryConsumer.class);
     @KafkaListener(topics = "like-events-re", groupId = "notification-group")
     public void consume(RetryEvent<LikeEvent> event) {
+
+        LikeEvent likeEvent = mapper.convertValue(event.getOriginalEvent(),LikeEvent.class);
         if(event.getRemainingRetries() == 0 ){
             log.info("Maximum retries consumed, adding to dlq");
-            // add to dlq;
+            // add to dlq;E
             return;
         }
         // 1. Map event to notification
-        Notification notification = mapperRegistry.map(event.getOriginalEvent());
+        Notification notification = mapperRegistry.map(likeEvent);
 
         // 2. Save to DB
         try{

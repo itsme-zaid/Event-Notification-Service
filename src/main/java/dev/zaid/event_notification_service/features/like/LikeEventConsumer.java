@@ -40,7 +40,6 @@ public class LikeEventConsumer {
             log.warn("Kafka sending duplicate notifications");
             return;
         }
-
         // 3. (Optional) Send real-time push/email
     }
 

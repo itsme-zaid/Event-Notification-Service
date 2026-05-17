@@ -7,6 +7,7 @@ import dev.zaid.event_notification_service.features.post.PostEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 public class ProducerEvent {
@@ -30,21 +31,18 @@ public class ProducerEvent {
         String key = event.getUserId();
         kafkaTemplate.send("follow-events",key,event);
     }
-
+    ObjectMapper mapper = new ObjectMapper();
     public void producePost(PostEvent event){
         String key = event.getAuthorId();
         kafkaTemplate.send("post-events",event);
     }
     public void producePostRE(RetryEvent<PostEvent> re){
-        String key = re.getOriginalEvent().getAuthorId();
         kafkaTemplate.send("post-events-re",re);
     }
     public void produceLikeRE(RetryEvent<LikeEvent> re){
-        String key = re.getOriginalEvent().getActorId();
         kafkaTemplate.send("like-events-re",re);
     }
     public void produceFollowRE(RetryEvent<FollowEvent> re){
-        String key = re.getOriginalEvent().getUserId();
         kafkaTemplate.send("follow-events-re",re);
     }
 }
